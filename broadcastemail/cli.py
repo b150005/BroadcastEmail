@@ -391,7 +391,7 @@ def send_message_with_sleep(sec: int, message: Message):
 
     # 個別設定
     replace_dict: dict = {}
-    for key in message.email_info.company_names.keys:
+    for key in message.email_info.company_names.keys():
       # 生成したベースMIMEオブジェクトをディープコピー
       mime = copy.deepcopy(base_mime)
       # 送信先アドレス
@@ -435,5 +435,5 @@ def main():
     messagebox.showerror(result_title, result_message)
   else:
     result_title = '送信成功'
-    result_message = len(message.email_info.company_names.keys) + '件すべてのメールの配信に成功しました。'
+    result_message = len(message.email_info.company_names.keys()) + '件すべてのメールの配信に成功しました。'
     messagebox.showinfo(result_title, result_message)
