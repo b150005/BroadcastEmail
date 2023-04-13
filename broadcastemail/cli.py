@@ -187,7 +187,7 @@ def read_csv_file(message: Message, csv_file_path: str):
       message.server_info.account_password = server_info_list[3]
 
       # 2行目 (送信元アドレス)
-      message.email_info.from_address = next(reader)
+      message.email_info.from_address = ", ".join(strip_list(next(reader)))
 
       # 3行目以降 (会社名, 顧客名, 送信先アドレス...)
       # 会社名・顧客名はそれぞれ1社/1人しか指定できない
@@ -311,8 +311,9 @@ def replace_placeholder(message_content: str, replace_dict: Dict[str, str]) -> s
   -------
   会社名と担当者名のプレースホルダが置換されたメッセージ本文
   """
+  replaced_message: str = message_content
   for key in replace_dict.keys():
-    replaced_message = message_content.replace(key, replace_dict[key])
+    replaced_message = replaced_message.replace(key, replace_dict[key])
   
   return replaced_message
 
@@ -395,7 +396,7 @@ def send_message_with_sleep(sec: int, message: Message):
       # 生成したベースMIMEオブジェクトをディープコピー
       mime = copy.deepcopy(base_mime)
       # 送信先アドレス
-      mime['To'] = ','.join(message.email_info.to_addresses[key])
+      mime['To'] = ', '.join(message.email_info.to_addresses[key])
       # 会社名
       replace_dict['{COMPANY_NAME}'] = message.email_info.company_names[key]
       # 顧客名
@@ -435,5 +436,5 @@ def main():
     messagebox.showerror(result_title, result_message)
   else:
     result_title = '送信成功'
-    result_message = len(message.email_info.company_names.keys()) + '件すべてのメールの配信に成功しました。'
+    result_message = str(len(message.email_info.company_names.keys())) + '件すべてのメールの配信に成功しました。'
     messagebox.showinfo(result_title, result_message)
