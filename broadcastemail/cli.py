@@ -142,6 +142,8 @@ def get_file_path(filetype: FileType) -> str:
 def strip_list(_list: list[str]) -> list[str]:
   """
   listの各要素の前後の空白を削除したlistを返却する
+
+  空文字またはnullの要素は除外される
   
   Parameters
   ----------
@@ -150,9 +152,15 @@ def strip_list(_list: list[str]) -> list[str]:
   
   Returns
   -------
-  各要素の前後の空白が除去された文字列リスト
+  各要素の前後の空白が除去された文字列リスト(空文字またはnullの要素)
   """
-  return list(map(lambda e: e.strip(), _list))
+  result_list: list[str] = []
+
+  for item in _list:
+    if len(item.strip()) != 0:
+      result_list.append(item.strip())
+
+  return result_list
 
 def read_csv_file(message: Message, csv_file_path: str):
   """
